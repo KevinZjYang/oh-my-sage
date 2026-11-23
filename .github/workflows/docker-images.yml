@@ -1,5 +1,5 @@
 # 构建 MCP + 网页版两个 Docker 镜像并推送到 Docker Hub
-# 触发：推送到部署分支 truenas-web-docker 或打 tag v*，每次同时推送 <版本号> 与 latest 两个 tag
+# 触发：推送到 main 或打 tag v*，每次同时推送 <版本号> 与 latest 两个 tag
 # 前提：仓库 Secrets 里设置 DOCKERHUB_USERNAME 与 DOCKERHUB_TOKEN（用户 Docker Hub 账号 + 访问令牌）
 # NAS 更新流程：git pull → bash deploy/run.sh（docker compose pull && up -d）
 
@@ -7,7 +7,7 @@ name: Docker Images
 
 on:
   push:
-    branches: [truenas-web-docker]
+    branches: [main]
     tags: ['v*']
   workflow_dispatch:
 

@@ -76,7 +76,7 @@ powershell -ExecutionPolicy Bypass -File "$(npm root -g)/oh-my-sage-mcp/deploy/i
 ## 方式三：私有服务器（Docker）
 
 ```bash
-git clone -b truenas-web-docker https://github.com/KevinZjYang/oh-my-sage.git
+git clone https://github.com/KevinZjYang/oh-my-sage.git
 cd oh-my-sage/deploy
 # 编辑 docker-compose.yml：把 <...> 示例值替换成真实值（GATEWAY_URL、MCP_AUTH_TOKEN、LLM_* 等）
 docker compose pull
@@ -86,7 +86,7 @@ curl -s http://<服务器 IP>:3790/healthz   # {"ok":true,...} 即启动成功
 
 部署配置直接写在 `deploy/docker-compose.yml` 里：示例值用 `<...>` 占位，替换成真实值后直接部署，不需要 `.env` 文件。**填好真实值后不要提交该文件**（含 API Key / 网关地址等敏感信息）。
 
-镜像从 Docker Hub 拉取（纯镜像模式，不在服务器上编译）：推送到 `truenas-web-docker` 分支或打 `v*` tag 时，GitHub Actions 会自动构建并推送 `kevinzjyang/oh-my-sage-mcp`、`kevinzjyang/oh-my-sage-web` 两个镜像。升级：`git pull` 后重复 `docker compose pull && docker compose up -d` 即可。`git pull` 可能与本地改过的 compose 冲突——更新前先备份，或执行 `git update-index --skip-worktree deploy/docker-compose.yml` 让 git 不再跟踪该文件的改动。
+镜像从 Docker Hub 拉取（纯镜像模式，不在服务器上编译）：推送到 `main` 或打 `v*` tag 时，GitHub Actions 会自动构建并推送 `kevinzjyang/oh-my-sage-mcp`、`kevinzjyang/oh-my-sage-web` 两个镜像。升级：`git pull` 后重复 `docker compose pull && docker compose up -d` 即可。`git pull` 可能与本地改过的 compose 冲突——更新前先备份，或执行 `git update-index --skip-worktree deploy/docker-compose.yml` 让 git 不再跟踪该文件的改动。
 
 本分支的 compose 同时定义两个服务：`oh-my-sage-mcp`（Streamable HTTP `:3790`）与 `oh-my-sage-web`（网页版 `:3000`，无账号系统，勿暴露公网）。
 
