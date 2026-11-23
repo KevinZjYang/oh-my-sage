@@ -86,7 +86,7 @@ curl -s http://<服务器 IP>:3790/healthz   # {"ok":true,...} 即启动成功
 
 部署配置直接写在 `deploy/docker-compose.yml` 里：示例值用 `<...>` 占位，替换成真实值后直接部署，不需要 `.env` 文件。**填好真实值后不要提交该文件**（含 API Key / 网关地址等敏感信息）。
 
-镜像从 Docker Hub 拉取（纯镜像模式，不在服务器上编译）：推送到 `main` 或打 `v*` tag 时，GitHub Actions 会自动构建并推送 `kevinzjyang/oh-my-sage-mcp`、`kevinzjyang/oh-my-sage-web` 两个镜像。升级：`git pull` 后重复 `docker compose pull && docker compose up -d` 即可。`git pull` 可能与本地改过的 compose 冲突——更新前先备份，或执行 `git update-index --skip-worktree deploy/docker-compose.yml` 让 git 不再跟踪该文件的改动。
+镜像从 Docker Hub 拉取（纯镜像模式，不在服务器上编译）：MCP 与网页版**按改动范围独立构建**——推送到 `main` 时，GitHub Actions 只构建被改动影响的那一个镜像（改 `src/app`、`src/components`、`src/server`、`next.config.js`、`public` 等只构建 `kevinzjyang/oh-my-sage-web`；改 `src/core`、`src/mcp`、`Dockerfile` 等只构建 `kevinzjyang/oh-my-sage-mcp`），打 `v*` tag 或手动触发（`workflow_dispatch`）同样按各自配置执行。升级：`git pull` 后重复 `docker compose pull && docker compose up -d` 即可。`git pull` 可能与本地改过的 compose 冲突——更新前先备份，或执行 `git update-index --skip-worktree deploy/docker-compose.yml` 让 git 不再跟踪该文件的改动。
 
 本分支的 compose 同时定义两个服务：`oh-my-sage-mcp`（Streamable HTTP `:3790`）与 `oh-my-sage-web`（网页版 `:3000`，无账号系统，勿暴露公网）。
 
